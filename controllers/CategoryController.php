@@ -12,8 +12,8 @@ class CategoryController extends activeController
     
     public function actionProducts($id)
     {
-        $product = Category::find()->select('name')->all();
-        $product_category = Product::find()->where(['category' => $product[$id - 1]['name']])->all();
+        $product = Category::find()->where(['id' => $id])->one();
+        $product_category = Product::find()->where(['category' => $product['name']])->all();
         return $product_category;
     }
 }
