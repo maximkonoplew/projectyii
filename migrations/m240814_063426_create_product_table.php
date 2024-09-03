@@ -12,18 +12,78 @@ class m240814_063426_create_product_table extends Migration
      */
     public function safeUp()
     {
-        $sql = 'CREATE TABLE product (id INTEGER AUTO_INCREMENT PRIMARY KEY, name VARCHAR(20), description VARCHAR(30), category  VARCHAR(20));';
-        Yii::$app->db->CreateCommand($sql)->execute();
-        Yii::$app->db->createCommand()->batchInsert('product', ['name', 'description', 'category'], [
-            ['Мясо', 'Свинина и говядина', 'Продукты'],
-            ['Рыба', 'Из всех морей России', 'Продукты'],
-            ['Макароны', 'Как в Италии', 'Продукты'],
-            ['Картофель', 'Второй хлеб на стол', 'Продукты'],
-            ['Футболки', 'Все цвета радуги', 'Одежда'],
-            ['Джинсы', 'Мужские и женские', 'Одежда'],
-            ['Куртки', 'Для любого времени года', 'Одежда'],
-            ['Перчатки', 'Для холодного времени года', 'Одежда'],
-        ])->execute();
+        $this->createTable('product', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string()->notNull()->unique(),
+            'description' => $this->text()->null(),
+            'category' => $this->string()->notNull(),
+            'price' => $this->integer(),
+            'number' => $this->integer()
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $this->insert('product', [
+            'name' => 'Мясо',
+            'description' => 'Свинина и говядина',
+            'category' => 'Продукты',
+            'price' => 100,
+            'number' => 10
+        ]);
+
+        $this->insert('product', [
+            'name' => 'Рыба',
+            'description' => 'Из всех морей России',
+            'category' => 'Продукты',
+            'price' => 200,
+            'number' => 15
+        ]);
+
+        $this->insert('product', [
+            'name' => 'Макароны',
+            'description' => 'Как в Италии',
+            'category' => 'Продукты',
+            'price' => 50,
+            'number' => 12
+        ]);
+
+        $this->insert('product', [
+            'name' => 'Картофель',
+            'description' => 'Второй хлеб на стол',
+            'category' => 'Продукты',
+            'price' => 20,
+            'number' => 40
+        ]);
+
+        $this->insert('product', [
+            'name' => 'Футболки',
+            'description' => 'Все цвета радуги',
+            'category' => 'Одежда',
+            'price' => 100,
+            'number' => 30
+        ]);
+
+        $this->insert('product', [
+            'name' => 'Джинсы',
+            'description' => 'Мужские и женские',
+            'category' => 'Одежда',
+            'price' => 90,
+            'number' => 120
+        ]);
+
+        $this->insert('product', [
+            'name' => 'Куртки',
+            'description' => 'Для любого времени года',
+            'category' => 'Одежда',
+            'price' => 500,
+            'number' => 70
+        ]);
+
+        $this->insert('product', [
+            'name' => 'Перчатки',
+            'description' => 'Для холодного времени года',
+            'category' => 'Одежда',
+            'price' => 120,
+            'number' => 55
+        ]);
     }
 
     /**
@@ -31,6 +91,6 @@ class m240814_063426_create_product_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%product}}');
+        $this->dropTable('product');
     }
 }

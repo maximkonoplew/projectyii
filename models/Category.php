@@ -44,4 +44,11 @@ class Category extends \yii\db\ActiveRecord
             'description' => 'Description',
         ];
     }
+
+    public function products($id)
+    {
+        $product = Category::find()->where(['id' => $id])->one();
+        $product_category = Product::find()->where(['category' => $product['name']])->all();
+        return $product_category;
+    }
 }

@@ -12,12 +12,21 @@ class m240814_093014_create_category_table extends Migration
      */
     public function safeUp()
     {
-        $sql = 'CREATE TABLE category (id INTEGER AUTO_INCREMENT PRIMARY KEY, name VARCHAR(20), description VARCHAR(30));';
-        Yii::$app->db->CreateCommand($sql)->execute();
-        Yii::$app->db->createCommand()->batchInsert('category', ['name', 'description'], [
-            ['Продукты', 'Из всех регионов России'],
-            ['Одежда', 'Сделано не в Китае'],
-        ])->execute();
+        $this->createTable('category', [
+            'id' => $this->primaryKey(),
+            'name' => $this->string()->notNull()->unique(),
+            'description' => $this->text()->null()
+        ], "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
+        $this->insert('category', [
+            'name' => 'Продукты',
+            'description' => 'Из всех регионов России'
+        ]);
+
+        $this->insert('category', [
+            'name' => 'Одежда',
+            'description' => 'Сделано не в Китае'
+        ]);
     }
 
     /**
@@ -25,6 +34,6 @@ class m240814_093014_create_category_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('{{%category}}');
+        $this->dropTable('category');
     }
 }
