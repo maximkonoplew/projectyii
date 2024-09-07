@@ -45,10 +45,9 @@ class Category extends \yii\db\ActiveRecord
         ];
     }
 
-    public function products($id)
+    public function products()
     {
-        $product = Category::find()->where(['id' => $id])->one();
-        $product_category = Product::find()->where(['category' => $product['name']])->all();
+        $product_category = Product::find()->where(['category' => $this->name])->all();
         return $product_category;
     }
 }

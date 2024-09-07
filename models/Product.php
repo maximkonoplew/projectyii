@@ -51,39 +51,33 @@ class Product extends \yii\db\ActiveRecord
         ];
     }
 
-    public function buy($id)
+    public function buy()
     {
-        $product = Product::find()->where(['id' => $id])->one();
-        return 'Товар ' . $product['name'] . ' добавлен в корзину';
+        return 'Товар ' . $this->name . ' добавлен в корзину';
     }
 
-    public function compare($id1, $id2)
+    public static function compare($product_name)
     {
-        $product_compare_1 = Product::find()->where(['id' => $id1])->one();
-        $product_compare_2 = Product::find()->where(['id' => $id2])->one();
-
-        if (strlen($product_compare_1['name']) > strlen($product_compare_2['name'])){
-            return $product_compare_1;
-        }elseif(strlen($product_compare_1['name']) < strlen($product_compare_2['name'])){
-            return $product_compare_2;
+        if (strlen($product_name[0]['name']) > strlen($product_name[1]['name'])){
+            return $product_name[0];
+        }elseif(strlen($product_name[0]['name']) < strlen($product_name[1]['name'])){
+            return $product_name[1];
         }else{
             return "Количество букв в словах одинаково";
         }
     }
 
-    public function basket($id_product, $number_product)
+    public function basket($number_product)
     {
-        $basket = Product::find()->where(['id' => $id_product])->one();
-        if ($number_product <= $basket['number']){
-            $basket->number = $basket['number'] - $number_product;
-            $basket->save();
+        if ($number_product <= $this->number){
+            $this->number -= $number_product;
+            $this->save();
 
-            $product = new Basket;
-            $product->id_product = $id_product;
-            $price_product = Product::find()->where(['id' => $id_product])->one();
-            $product->price = $price_product['price'] * $number_product;
-            $product->number = $number_product;
-            $product->save();
+            $basket = new Basket;
+            $basket->id_product = $this->id;
+            $basket->price = $this->price * $number_product;
+            $basket->number = $number_product;
+            $basket->save();
             return 'Товар добавлен';
         }else{
             return 'Такого количества товара нет';
